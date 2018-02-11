@@ -7,24 +7,31 @@
   <title>RPG Game</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
   <style>
-    .fader {
-      opacity: 0.5;
+  body {
+    background: url(./assets/images/background.jpg) no-repeat center center fixed;
+    color: white;
+    text-shadow: 1px 1px black;
+
+  }
+  .heading, h1 {
+    text-align: center;
+    text-shadow: 2px 2px black;
+    font-size: 50px;
+    margin-bottom: 30px;
     }
   </style>
 </head>
 <body>
-  <div class="jumbotron jumbotron-fluid">
-    <div class="container">
-      <h1 class="display-3 text-center">Disney Princess Thunder Dome</h1>
-      <!-- <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p> -->
+  <div class="heading">
+    <h1>Disney Princess Thunder Dome</h1>
     </div>
   </div>
   <div class="container">
     <div class="row characters"></div>
     <div class="row gameplay">
-      <div class="col-md-4 myHero"></div>
+      <div class="col-md-4"><span class="pull-right myHero"></span></div>
       <div class="col-md-4 text-center stats"></div>
-      <div class="col-md-4 myEnemy"></div>
+      <div class="col-md-4"><span class="pull-left myEnemy"></span></div>
     </div>
   </div>
   <script
