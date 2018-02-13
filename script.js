@@ -5,42 +5,42 @@ var charArr = [
     name: "Belle",
     hp: 140,
     attack: 5,
-    counter: 23,
+    counter: 15,
     image: "./assets/images/belle.jpeg"
   },
   {
     name: "Cinderella",
     hp: 120,
     attack: 4,
-    counter: 24,
+    counter: 12,
     image: "./assets/images/cinderella.jpeg"
   },
   {
     name: "Jasmine",
     hp: 150,
     attack: 6,
-    counter: 22,
+    counter: 10,
     image: "./assets/images/jasmine.jpeg"
   },
   {
     name: "Merida",
     hp: 100,
     attack: 7,
-    counter: 21,
+    counter: 7,
     image: "./assets/images/merida.jpeg"
   },
   {
     name: "Mulan",
     hp: 110,
     attack: 8,
-    counter: 20,
+    counter: 5,
     image: "./assets/images/mulan.jpeg"
   },
   {
     name: "Snow White",
     hp: 130,
     attack: 3,
-    counter: 25,
+    counter: 18,
     image: "./assets/images/snow-white.jpeg"
   },
 ]
@@ -52,10 +52,13 @@ var isHeroChosen
 var chosenEnemy
 // is enemy chosen bool
 var isEnemyChosen
-
+// adjustable hero health
 var heroHeatlh
+// adjustable enemy health
 var enemyHealth = 0
+// hero attack, increases
 var heroAttack = 0
+// enemies left
 var enemiesLeft = 5
 
 // init game function
@@ -77,7 +80,6 @@ initGame( )
 $(document).on("click", ".char", function ( ) {
   if( !isHeroChosen ) {
   chosenHero = charArr[$(this).attr("value")]
-  console.log(chosenHero)
   isHeroChosen = true
   isHeroAlive = true
   $(".myHero").append($(this))
@@ -86,7 +88,6 @@ $(document).on("click", ".char", function ( ) {
 
   else if( !isEnemyChosen ) {
   chosenEnemy = charArr[$(this).attr("value")]
-  console.log(chosenEnemy)
   isEnemyChosen = true
   isEnemyAlive = true
   $(".myEnemy").append($(this))
@@ -97,10 +98,10 @@ $(document).on("click", ".char", function ( ) {
   }
 })
 
+// fill the game space with game play stats
 function fillStats ( ) {
   var attackButton = $("<button type='button' class='btn btn-danger btn-lg'>ATTACK!</button>")
   $(".stats").empty( )
-  
   $(".stats").append("<h4 id='hh'>Hero Health: "+heroHealth+"</h4>")
   enemyHealth = chosenEnemy.hp
   $(".stats").append("<h4 id='eh'>Enemy Health: "+enemyHealth+"</h4><br><br>")
@@ -117,11 +118,11 @@ function attackFunction ( ) {
   
   var enemyAttack = chosenEnemy.counter
 
+  // increases hero attack on each click
   if( (isHeroChosen = true) && (isEnemyChosen = true) ) {
     for( i = 0; i < chosenHero.attack; i++ ) {
       if ( i === 1 ) {break;}
       heroAttack = heroAttack + chosenHero.attack
-      console.log(heroAttack)
     }
     $("#gameText").html("<p>"+chosenHero.name+" attacked for "+heroAttack+" points.</p><p>"+chosenEnemy.name+" counter-attacked for "+enemyAttack+" points.</p>")
     heroHealth = (heroHealth - enemyAttack)
@@ -146,6 +147,7 @@ function attackFunction ( ) {
     continuePlay ( )
   }
   
+  // continue play after enemy dies
   function continuePlay ( ) {
     $(".characters").show( )
     isEnemyChosen = false
@@ -156,6 +158,8 @@ function attackFunction ( ) {
         $(".gameText").empty( )
       }
   }
+
+  // reset game
   $(document).on("click", ".btn-primary", function ( ) {
     location.reload( )
   })
