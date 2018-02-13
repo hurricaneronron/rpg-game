@@ -3,38 +3,38 @@ $(document).ready( function ( ) {
 var charArr = [
   {
     name: "Belle",
-    attack: 5,
-    counter: 23,
+    attack: 7,
+    counter: 6,
     image: "./assets/images/belle.jpeg"
   },
   {
     name: "Cinderella",
-    attack: 4,
-    counter: 24,
+    attack: 6,
+    counter: 5,
     image: "./assets/images/cinderella.jpeg"
   },
   {
     name: "Jasmine",
-    attack: 6,
-    counter: 22,
+    attack: 8,
+    counter: 6,
     image: "./assets/images/jasmine.jpeg"
   },
   {
     name: "Merida",
-    attack: 7,
-    counter: 21,
+    attack: 9,
+    counter: 7,
     image: "./assets/images/merida.jpeg"
   },
   {
     name: "Mulan",
-    attack: 8,
-    counter: 20,
+    attack: 10,
+    counter: 8,
     image: "./assets/images/mulan.jpeg"
   },
   {
     name: "Snow White",
-    attack: 3,
-    counter: 25,
+    attack: 5,
+    counter: 5,
     image: "./assets/images/snow-white.jpeg"
   },
 ]
@@ -42,15 +42,13 @@ var charArr = [
 var chosenHero
 // is hero chosen bool
 var isHeroChosen
+// is hero alive bool
+var isHeroAlive
 // chosen enemy obj
 var chosenEnemy
-// is enemy chosen bool
-var isEnemyChosen
 
-
-var heroHealth = 150
-var enemyHealth = 150
-var heroAttack = 0
+var heroHealth = 50
+var enemyHealth = 50
 
 // init game function
 function initGame ( ) {
@@ -105,16 +103,13 @@ $(document).on("click", ".btn-danger", function ( ) {
   attackFunction( )
 })
 
-function attackFunction ( ) {  
-  
-  var enemyAttack = chosenEnemy.counter
+function attackFunction ( ) {
 
+// attack points randomizer
+  var heroAttack = Math.floor(Math.random( ) * (chosenHero.attack))
+  var enemyAttack = Math.floor(Math.random( ) * (chosenEnemy.counter))
+    
   if( (isHeroChosen = true) && (isEnemyChosen = true) ) {
-    for( i = 0; i < chosenHero.attack; i++ ) {
-      if ( i === 1 ) {break;}
-      heroAttack = heroAttack + chosenHero.attack
-      console.log(heroAttack)
-    }
     $("#gameText").html("<p>"+chosenHero.name+" attacked for "+heroAttack+" points.</p><p>"+chosenEnemy.name+" counter-attacked for "+enemyAttack+" points.</p>")
     heroHealth = (heroHealth - enemyAttack)
     $("#hh").html("Hero Health: "+heroHealth+"")
@@ -151,7 +146,3 @@ function attackFunction ( ) {
   })
 }
 })
-
-// The game currently runs as a "see how many enemies you can get through" type. The attack and counter-attack are determined randomly from set maximums for each character. Without setting the hero up with an extreme advantage in intial health, I don't think it's possible to fight through all of the enemies. In order to meet the assignment guidelines I would need to do the following:
-// Increase hero attack each time the attack button is clicked. Stabilize enemy counter-attack.
-// Create a condition for when all enemies have been defeated and the hero is still alive, which allows you to win the game.
