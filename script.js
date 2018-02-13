@@ -4,37 +4,37 @@ var charArr = [
   {
     name: "Belle",
     attack: 7,
-    defense: 5,
+    counter: 5,
     image: "./assets/images/belle.jpeg"
   },
   {
     name: "Cinderella",
     attack: 6,
-    defense: 6,
+    counter: 6,
     image: "./assets/images/cinderella.jpeg"
   },
   {
     name: "Jasmine",
     attack: 8,
-    defense: 4,
+    counter: 4,
     image: "./assets/images/jasmine.jpeg"
   },
   {
     name: "Merida",
     attack: 9,
-    defense: 3,
+    counter: 3,
     image: "./assets/images/merida.jpeg"
   },
   {
     name: "Mulan",
     attack: 10,
-    defense: 2,
+    counter: 2,
     image: "./assets/images/mulan.jpeg"
   },
   {
     name: "Snow White",
     attack: 5,
-    defense: 7,
+    counter: 7,
     image: "./assets/images/snow-white.jpeg"
   },
 ]
@@ -51,8 +51,8 @@ var isEnemyChosen
 // is enemy alive bool
 var isEnemyAlive
 
-var heroHealth = 15
-var enemyHealth = 15
+var heroHealth = 50
+var enemyHealth = 50
 
 // init game function
 function initGame ( ) {
@@ -62,7 +62,7 @@ function initGame ( ) {
   for ( var i = 0 ; i < charArr.length ; i++ ) {
     var charThing = $("<div id='character-"+i+"' class='char col-md-"+num+"' value='"+i+"'></div>")
     charThing.html(
-      "<img src='"+charArr[i].image+"' style='width:125px; height=175px; border: 10px solid purple;'/><h3 style='text-align:center'>"+charArr[i].name+"</h3><h5 style='text-align:center'>Attack: "+charArr[i].attack+"</h5><h5 style='text-align:center'>Defense: "+charArr[i].defense+"</h5>"
+      "<img src='"+charArr[i].image+"' style='width:125px; height=175px; border: 10px solid purple;'/><h3 style='text-align:center'>"+charArr[i].name+"</h3><h5 style='text-align:center'>Attack: "+charArr[i].attack+"</h5><h5 style='text-align:center'>Counter-Attack: "+charArr[i].counter+"</h5>"
     )
     $(".characters").append(charThing)
   }
@@ -75,6 +75,7 @@ $(document).on("click", ".char", function ( ) {
   chosenHero = charArr[$(this).attr("value")]
   console.log(chosenHero)
   isHeroChosen = true
+  isHeroAlive = true
   $(".myHero").append($(this))
   }
 
@@ -82,6 +83,7 @@ $(document).on("click", ".char", function ( ) {
   chosenEnemy = charArr[$(this).attr("value")]
   console.log(chosenEnemy)
   isEnemyChosen = true
+  isEnemyAlive = true
   $(".myEnemy").append($(this))
   $(".characters").hide( )
   fillStats( )
@@ -91,10 +93,11 @@ $(document).on("click", ".char", function ( ) {
 
 function fillStats ( ) {
   var attackButton = $("<button type='button' class='btn btn-danger btn-lg'>ATTACK!</button>")
+  $(".stats").empty( )
   $(".stats").append("<h4 id='hh'>Hero Health: "+heroHealth+"</h4>")
-  $(".stats").append("<h4 id='eh'>Enemy Health: "+enemyHealth+"</h4>")
-  $(".stats").append("<h4 id='gameText'></h4>")
+  $(".stats").append("<h4 id='eh'>Enemy Health: "+enemyHealth+"</h4><br><br>")
   $(".stats").append(attackButton)
+  $(".stats").append("<br><br><h4 id='gameText'></h4>")
 }
 
 
@@ -105,48 +108,46 @@ $(document).on("click", ".btn-danger", function ( ) {
 })
 
 function attackFunction ( ) {
-  // attack points randomizer
-  var heroAttack = Math.floor(Math.random( ) * (chosenHero.attack))
-  var enemyAttack = Math.floor(Math.random( ) * (chosenEnemy.attack))
-  // defense points randomizer
-  var heroDefense = Math.floor(Math.random( ) * (chosenHero.defense))
-  var enemyDefense = Math.floor(Math.random( ) * (chosenEnemy.defense))
 
+// attack points randomizer
+  var heroAttack = Math.floor(Math.random( ) * (chosenHero.attack))
+  var enemyAttack = Math.floor(Math.random( ) * (chosenEnemy.counter))
+    
   if( (isHeroChosen = true) && (isEnemyChosen = true) ) {
-    $("#gameText").html("<p>"+chosenHero.name+" attacked for "+heroAttack+" points and blocked "+heroDefense+" attack points.</p><p>"+chosenEnemy.name+" attacked for "+enemyAttack+" points and blocked "+enemyDefense+" attack points.</p>")
-    heroHealth = (heroHealth - (enemyAttack - heroDefense))
+    $("#gameText").html("<p>"+chosenHero.name+" attacked for "+heroAttack+" points.</p><p>"+chosenEnemy.name+" counter-attacked for "+enemyAttack+" points.</p>")
+    heroHealth = (heroHealth - enemyAttack)
     $("#hh").html("Hero Health: "+heroHealth+"")
-    enemyHealth = (enemyHealth - (heroAttack - enemyDefense))
+    enemyHealth = (enemyHealth - heroAttack)
     $("#eh").html("Enemy Health: "+enemyHealth+"")
   }
-
+  
   // end game
   var resetButton = $("<button type='button' class='btn btn-primary btn-lg'>Reset</button>")
 
   if( heroHealth <= 0 ) {
-    $("#gameText").append("<h2>Oh no! Your hero has died. Try again.</h2>")
+    $("#hh").html("Hero Health: 0")
+    $(".heading").html("<h1>Oh no! Your hero has died. Try again.</h1>")
     $(".btn-danger").hide( )
     $(".stats").append(resetButton)
   }
   
   if( enemyHealth <= 0 ) {
-    $("#gameText").append("<h2>Congratulations! You defeated your enemy!</h2>")
+    $(".myEnemy").empty( )
+    $("#eh").html("Enemy Health: 0")
     $(".btn-danger").hide( )
-    $(".stats").append(resetButton)
+    continuePlay ( )
+  }
+  
+  function continuePlay ( ) {
+    $(".characters").show( )
+    isEnemyChosen = false
+    $("#hh").empty( )
+    enemyHealth = 50
+    $("#eh").empty( )
+    $(".heading").html("<h1>Congratulations! You defeated your enemy! Choose a new one!</h1>")
   }
   $(document).on("click", ".btn-primary", function ( ) {
     location.reload( )
   })
 }
-
-// function resetGame ( ) {
-//   isHeroChosen = false
-//   isEnemyChosen = false
-//   $(".gameplay").empty( )
-//   $(".characters").show( )
-// }
-
-
-
-
 })
