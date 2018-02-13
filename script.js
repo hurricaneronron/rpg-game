@@ -3,36 +3,42 @@ $(document).ready( function ( ) {
 var charArr = [
   {
     name: "Belle",
+    hp: 140,
     attack: 5,
     counter: 23,
     image: "./assets/images/belle.jpeg"
   },
   {
     name: "Cinderella",
+    hp: 120,
     attack: 4,
     counter: 24,
     image: "./assets/images/cinderella.jpeg"
   },
   {
     name: "Jasmine",
+    hp: 150,
     attack: 6,
     counter: 22,
     image: "./assets/images/jasmine.jpeg"
   },
   {
     name: "Merida",
+    hp: 100,
     attack: 7,
     counter: 21,
     image: "./assets/images/merida.jpeg"
   },
   {
     name: "Mulan",
+    hp: 110,
     attack: 8,
     counter: 20,
     image: "./assets/images/mulan.jpeg"
   },
   {
     name: "Snow White",
+    hp: 130,
     attack: 3,
     counter: 25,
     image: "./assets/images/snow-white.jpeg"
@@ -47,10 +53,10 @@ var chosenEnemy
 // is enemy chosen bool
 var isEnemyChosen
 
-
-var heroHealth = 150
-var enemyHealth = 150
+var heroHeatlh
+var enemyHealth = 0
 var heroAttack = 0
+var enemiesLeft = 5
 
 // init game function
 function initGame ( ) {
@@ -60,7 +66,7 @@ function initGame ( ) {
   for ( var i = 0 ; i < charArr.length ; i++ ) {
     var charThing = $("<div id='character-"+i+"' class='char col-md-"+num+"' value='"+i+"'></div>")
     charThing.html(
-      "<img src='"+charArr[i].image+"' style='width:125px; height=175px; border: 10px solid purple;'/><h3 style='text-align:center'>"+charArr[i].name+"</h3><h5 style='text-align:center'>Attack: "+charArr[i].attack+"</h5><h5 style='text-align:center'>Counter-Attack: "+charArr[i].counter+"</h5>"
+      "<img src='"+charArr[i].image+"' style='width:125px; height=175px; border: 10px solid purple;'/><h3 style='text-align:center'>"+charArr[i].name+"</h3><h5 style='text-align:center'>Health: "+charArr[i].hp+"<h5 style='text-align:center'>Attack: "+charArr[i].attack+"</h5><h5 style='text-align:center'>Counter-Attack: "+charArr[i].counter+"</h5>"
     )
     $(".characters").append(charThing)
   }
@@ -75,6 +81,7 @@ $(document).on("click", ".char", function ( ) {
   isHeroChosen = true
   isHeroAlive = true
   $(".myHero").append($(this))
+  heroHealth = chosenHero.hp
   }
 
   else if( !isEnemyChosen ) {
@@ -86,19 +93,20 @@ $(document).on("click", ".char", function ( ) {
   $(".characters").hide( )
   fillStats( )
   $(".heading").html("<h1>Let's Fight!</h1>")
+  enemiesLeft--
   }
 })
 
 function fillStats ( ) {
   var attackButton = $("<button type='button' class='btn btn-danger btn-lg'>ATTACK!</button>")
   $(".stats").empty( )
+  
   $(".stats").append("<h4 id='hh'>Hero Health: "+heroHealth+"</h4>")
+  enemyHealth = chosenEnemy.hp
   $(".stats").append("<h4 id='eh'>Enemy Health: "+enemyHealth+"</h4><br><br>")
   $(".stats").append(attackButton)
   $(".stats").append("<br><br><h4 id='gameText'></h4>")
 }
-
-
 
 // attack function
 $(document).on("click", ".btn-danger", function ( ) {
@@ -141,17 +149,15 @@ function attackFunction ( ) {
   function continuePlay ( ) {
     $(".characters").show( )
     isEnemyChosen = false
-    $("#hh").empty( )
-    enemyHealth = 50
     $("#eh").empty( )
     $(".heading").html("<h1>Congratulations! You defeated your enemy!</h1><h1>Choose a new one!</h1>")
+      if (enemiesLeft === 0) {
+        $(".heading").html("<h1>You win! You have defeated all the enemies.")
+        $(".gameText").empty( )
+      }
   }
   $(document).on("click", ".btn-primary", function ( ) {
     location.reload( )
   })
 }
 })
-
-// The game currently runs as a "see how many enemies you can get through" type. The attack and counter-attack are determined randomly from set maximums for each character. Without setting the hero up with an extreme advantage in intial health, I don't think it's possible to fight through all of the enemies. In order to meet the assignment guidelines I would need to do the following:
-// Increase hero attack each time the attack button is clicked. Stabilize enemy counter-attack.
-// Create a condition for when all enemies have been defeated and the hero is still alive, which allows you to win the game.
